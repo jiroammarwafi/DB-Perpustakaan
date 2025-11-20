@@ -14,7 +14,7 @@ public class DBHelper {
         if (koneksi == null) {
             try {
                 // Konfigurasi koneksi Anda
-                String url = "jdbc:postgresql://localhost:5432/dbperpus"; 
+                String url = "jdbc:postgresql://localhost:5432/pbo_perpus"; 
                 String user = "postgres"; 
                 String password = "9023JN"; 
 
