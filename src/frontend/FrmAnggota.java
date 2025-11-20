@@ -6,6 +6,10 @@ package src.frontend;/**
  *
  * @author luvma
  */
+import src.backend.*;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 public class FrmAnggota extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmAnggota.class.getName());
@@ -15,6 +19,13 @@ public class FrmAnggota extends javax.swing.JFrame {
      */
     public FrmAnggota() {
         initComponents();
+    }
+
+    public void kosongkanForm() {
+        txtIdAnggota.setText("0");
+        txtNama.setText("");
+        txtAlamat.setText("");
+        txtNoTelp.setText("");
     }
 
     /**
@@ -28,21 +39,21 @@ public class FrmAnggota extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
+        txtIdAnggota = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtNama = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
+        txtAlamat = new javax.swing.JTextField();
         jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jTextField5 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        txtNoTelp = new javax.swing.JTextField();
+        btnSimpan = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
+        btnTambahBaru = new javax.swing.JButton();
+        txtCari = new javax.swing.JTextField();
+        btnCari = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblAnggota = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -59,15 +70,15 @@ public class FrmAnggota extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setEnabled(false);
-        jTextField1.setName("txtidAnggota"); // NOI18N
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        txtIdAnggota.setEnabled(false);
+        txtIdAnggota.setName("txtIdAnggota"); // NOI18N
+        txtIdAnggota.addActionListener(this::txtIdAnggotaActionPerformed);
 
         jTextField2.setText("ID Anggota");
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
-        jTextField3.setName("txtNama"); // NOI18N
-        jTextField3.addActionListener(this::jTextField3ActionPerformed);
+        txtNama.setName("txtNama"); // NOI18N
+        txtNama.addActionListener(this::txtNamaActionPerformed);
 
         jTextField4.setText("Nama Anggota");
         jTextField4.addActionListener(this::jTextField4ActionPerformed);
@@ -75,31 +86,31 @@ public class FrmAnggota extends javax.swing.JFrame {
         jTextField6.setText("Alamat");
         jTextField6.addActionListener(this::jTextField6ActionPerformed);
 
-        jTextField7.setName("txtAlamat"); // NOI18N
-        jTextField7.addActionListener(this::jTextField7ActionPerformed);
+        txtAlamat.setName("txtAlamat"); // NOI18N
+        txtAlamat.addActionListener(this::txtAlamatActionPerformed);
 
         jTextField8.setText("No Telp.");
         jTextField8.addActionListener(this::jTextField8ActionPerformed);
 
-        jTextField9.setName("txtNoTelp"); // NOI18N
-        jTextField9.addActionListener(this::jTextField9ActionPerformed);
+        txtNoTelp.setName("txtNoTelp"); // NOI18N
+        txtNoTelp.addActionListener(this::txtNoTelpActionPerformed);
 
-        jButton1.setText("Simpan");
-        jButton1.setName("btnSimpan"); // NOI18N
+        btnSimpan.setText("Simpan");
+        btnSimpan.setName("btnSimpan"); // NOI18N
 
-        jButton2.setText("Hapus");
-        jButton2.setName("btnHapus"); // NOI18N
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnHapus.setText("Hapus");
+        btnHapus.setName("btnHapus"); // NOI18N
+        btnHapus.addActionListener(this::btnHapusActionPerformed);
 
-        jButton3.setText("Tambah Baru");
-        jButton3.setName("btnTambahBaru"); // NOI18N
+        btnTambahBaru.setText("Tambah Baru");
+        btnTambahBaru.setName("btnTambahBaru"); // NOI18N
 
-        jTextField5.setName("txtCari"); // NOI18N
+        txtCari.setName("txtCari"); // NOI18N
 
-        jButton4.setText("Cari");
-        jButton4.setName("btnCari"); // NOI18N
+        btnCari.setText("Cari");
+        btnCari.setName("btnCari"); // NOI18N
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblAnggota.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -110,9 +121,9 @@ public class FrmAnggota extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable2.setName("tblAnggota"); // NOI18N
-        jTable2.setShowGrid(true);
-        jScrollPane2.setViewportView(jTable2);
+        tblAnggota.setName("tblAnggota"); // NOI18N
+        tblAnggota.setShowGrid(true);
+        jScrollPane2.setViewportView(tblAnggota);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,15 +135,15 @@ public class FrmAnggota extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jButton1)
-                                .addComponent(jButton4))
+                                .addComponent(btnSimpan)
+                                .addComponent(btnCari))
                             .addGap(18, 18, 18)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jButton2)
+                                    .addComponent(btnHapus)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jButton3))
-                                .addComponent(jTextField5)))
+                                    .addComponent(btnTambahBaru))
+                                .addComponent(txtCari)))
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,10 +153,10 @@ public class FrmAnggota extends javax.swing.JFrame {
                             .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField9))))
+                            .addComponent(txtAlamat, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                            .addComponent(txtIdAnggota, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNama, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNoTelp))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -153,29 +164,29 @@ public class FrmAnggota extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(btnSimpan)
+                    .addComponent(btnHapus)
+                    .addComponent(btnTambahBaru))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCari))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -192,33 +203,33 @@ public class FrmAnggota extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_txtNamaActionPerformed
 
     private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField6ActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void txtAlamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlamatActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_txtAlamatActionPerformed
 
     private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField8ActionPerformed
 
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+    private void txtNoTelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoTelpActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
+    }//GEN-LAST:event_txtNoTelpActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnHapusActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtIdAnggotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdAnggotaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtIdAnggotaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -246,22 +257,22 @@ public class FrmAnggota extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnSimpan;
+    private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnTambahBaru;
+    private javax.swing.JButton btnCari;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblAnggota;
+    private javax.swing.JTextField txtIdAnggota;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField txtNama;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField txtCari;
     private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField txtAlamat;
     private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField txtNoTelp;
     // End of variables declaration//GEN-END:variables
 }
