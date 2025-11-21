@@ -184,6 +184,26 @@ public class Buku {
         }
     }
 
+    public void save() {
+    if (getById(idBuku).getIdBuku() == 0) {
+        String SQL = "INSERT INTO buku (judul, idkategori, penulis, penerbit) VALUES("
+                + "'" + this.judul + "',"
+                + "'" + this.getKategori().getIdKategori() + "',"
+                + "'" + this.penulis + "',"
+                + "'" + this.penerbit + "'"
+                + ")";
+        this.idBuku = DBHelper.insertQueryGetId(SQL);
+    } else {
+        String SQL = "UPDATE buku SET "
+                + "judul = '" + this.judul + "',"
+                + "idkategori = '" + this.getKategori().getIdKategori() + "',"
+                + "penulis = '" + this.penulis + "',"
+                + "penerbit = '" + this.penerbit + "'"
+                + " WHERE idbuku = '" + this.idBuku + "'";
+        DBHelper.executeQuery(SQL);
+    }
+}
+
     public void delete() {
         String sql = "DELETE FROM buku WHERE idbuku = " + this.idBuku;
         DBHelper.executeQuery(sql);
