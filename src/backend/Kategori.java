@@ -153,4 +153,10 @@ public class Kategori {
         }
         return ListKategori;
     }
+    
+    // Override toString() to display kategori name in combo box
+    @Override
+    public String toString() {
+        return this.nama;
+    }
 }
