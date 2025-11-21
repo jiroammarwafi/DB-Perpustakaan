@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package src.frontend;
+import src.backend.*;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.DefaultComboBoxModel;
 /**
  *
  * @author luvma
@@ -16,6 +20,62 @@ public class FrmBuku extends javax.swing.JFrame {
      */
     public FrmBuku() {
         initComponents();
+        tampilkanData();
+        tampilkanCmbKategori();
+        kosongkanForm();
+    }
+
+    public void kosongkanForm(){
+        txtIdBuku.setText("0");
+        cmbKategori.setSelectedIndex(0);
+        txtJudul.setText("");
+        txtPenerbit.setText("");
+        txtPenulis.setText("");
+    }
+
+    public void tampilkanData(){
+        String[] kolom = {"ID", "Kategori", "Judul", "Penerbit", "Penulis"};
+        ArrayList<Buku> list = new Buku().getAll();
+        Object rowData[] = new Object[5];
+
+        tblBuku.setModel(new DefaultTableModel(new Object[][] {}, kolom));
+
+        for (Buku buku : list) {
+            rowData[0] = buku.getIdBuku();
+            rowData[1] = buku.getKategori().getNama();
+            rowData[2] = buku.getJudul();
+            rowData[3] = buku.getPenerbit();
+            rowData[4] = buku.getPenulis();
+
+            ((DefaultTableModel)tblBuku.getModel()).addRow(rowData);
+        }
+    }
+
+    public void cari(String keyword){
+        String[] kolom = {"ID", "Kategori", "Judul", "Penerbit", "Penulis"};
+        ArrayList<Buku> list = new Buku().search(keyword);
+        Object rowData[] = new Object[5];
+
+        tblBuku.setModel(new DefaultTableModel(new Object[][] {}, kolom));
+
+        for (Buku buku : list) {
+            rowData[0] = buku.getIdBuku();
+            rowData[1] = buku.getKategori().getNama();
+            rowData[2] = buku.getJudul();
+            rowData[3] = buku.getPenerbit();
+            rowData[4] = buku.getPenulis();
+
+            ((DefaultTableModel)tblBuku.getModel()).addRow(rowData);
+        }
+    }
+
+    public void tampilkanCmbKategori(){
+        DefaultComboBoxModel model = new DefaultComboBoxModel(new Kategori().getAll().toArray());
+        cmbKategori.setModel(model);
+    }
+
+    public String toString(){
+        return "FrmBuku";
     }
 
     /**
@@ -67,15 +127,18 @@ public class FrmBuku extends javax.swing.JFrame {
         txtPenulis.addActionListener(this::txtPenulisActionPerformed);
 
         btnSimpan.setText("Simpan");
+        btnSimpan.addActionListener(this::btnSimpanActionPerformed);
 
         btnTambahBaru.setText("Tambah Baru");
         btnTambahBaru.addActionListener(this::btnTambahBaruActionPerformed);
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(this::btnHapusActionPerformed);
 
         txtCari.addActionListener(this::txtCariActionPerformed);
 
         btnCari.setText("Cari");
+        btnCari.addActionListener(this::btnCariActionPerformed);
 
         tblBuku.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,6 +152,11 @@ public class FrmBuku extends javax.swing.JFrame {
             }
         ));
         tblBuku.setShowGrid(true);
+        tblBuku.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBukuMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblBuku);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -188,12 +256,90 @@ public class FrmBuku extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPenulisActionPerformed
 
     private void btnTambahBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahBaruActionPerformed
+        kosongkanForm();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnTambahBaruActionPerformed
 
     private void txtCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCariActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCariActionPerformed
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        try {
+            if (cmbKategori.getSelectedItem() == null) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Pilih kategori terlebih dahulu!", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            Buku buku = new Buku();
+            buku.setIdBuku(Integer.parseInt(txtIdBuku.getText()));
+            buku.setIdKategori((Kategori) cmbKategori.getSelectedItem());
+            buku.setJudul(txtJudul.getText());
+            buku.setPenerbit(txtPenerbit.getText());
+            buku.setPenulis(txtPenulis.getText());
+            buku.save();
+            txtIdBuku.setText(Integer.toString(buku.getIdBuku()));
+            tampilkanData();
+            kosongkanForm();
+            javax.swing.JOptionPane.showMessageDialog(this, "Data berhasil disimpan!", "Sukses", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalStateException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "FK Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error saat menyimpan: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnSimpanActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        try {
+            DefaultTableModel model = (DefaultTableModel) tblBuku.getModel();
+            int row = tblBuku.getSelectedRow();
+            
+            if (row < 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Pilih buku yang akan dihapus!", "Warning", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus data ini?", "Konfirmasi", javax.swing.JOptionPane.YES_NO_OPTION);
+            if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+                Buku buku = new Buku().getById(Integer.parseInt(model.getValueAt(row, 0).toString()));
+                buku.delete();
+                kosongkanForm();
+                tampilkanData();
+                javax.swing.JOptionPane.showMessageDialog(this, "Data berhasil dihapus!", "Sukses", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error saat menghapus: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        try {
+            String keyword = txtCari.getText();
+            if (keyword.isEmpty()) {
+                tampilkanData();
+            } else {
+                cari(keyword);
+            }
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error saat mencari: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void tblBukuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBukuMouseClicked
+        DefaultTableModel model = (DefaultTableModel) tblBuku.getModel();
+        int row = tblBuku.getSelectedRow();
+
+        Buku buku = new Buku().getById(Integer.parseInt(model.getValueAt(row, 0).toString()));
+        txtIdBuku.setText(Integer.toString(buku.getIdBuku()));
+        cmbKategori.setSelectedItem(buku.getKategori());
+        txtJudul.setText(buku.getJudul());
+        txtPenerbit.setText(buku.getPenerbit());
+        txtPenulis.setText(buku.getPenulis());
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblBukuMouseClicked
 
     /**
      * @param args the command line arguments
