@@ -21,11 +21,11 @@ public class TestBackend {
         Buku buku3 = new Buku(novel, "Bintang Terang", "Erlangga", "Mat Sewoot");
 
         // test insert
-        buku1.save();
-        buku2.save();
+        buku1.saveForTestBackend();
+        buku2.saveForTestBackend();
         // test update
         buku2.setJudul("Aljabar Linier");
-        buku2.save();
+        buku2.saveForTestBackend();
         // test delete
         buku3.delete();
         // test select all

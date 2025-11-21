@@ -151,7 +151,7 @@ public class Buku {
         return listBuku;
     }
 
-    public void save() {
+    public void saveForTestBackend() {
         if (getById(idBuku).getIdBuku() == 0) {
             // Validation: ensure associated Kategori is set and persisted
             if (this.getKategori() == null || this.getKategori().getIdKategori() == 0) {
