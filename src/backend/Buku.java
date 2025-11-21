@@ -153,6 +153,11 @@ public class Buku {
 
     public void save() {
         if (getById(idBuku).getIdBuku() == 0) {
+            // Validation: ensure associated Kategori is set and persisted
+            if (this.getKategori() == null || this.getKategori().getIdKategori() == 0) {
+                throw new IllegalStateException("Cannot save Buku: associated Kategori is not set or not persisted (id=0).\n" +
+                        "Create or save the Kategori first before saving Buku.");
+            }
             String sql = "INSERT INTO buku (idkategori, judul, penerbit, penulis) "
                     + "VALUES ("
                     + "'" + this.getKategori().getIdKategori() + "', "
@@ -160,7 +165,11 @@ public class Buku {
                     + "'" + this.penerbit + "', "
                     + "'" + this.penulis + "' "
                     + ")";
-            this.idBuku = DBHelper.insertQueryGetId(sql);
+            // Debug: print SQL and capture returned id
+            System.out.println("[DEBUG] Buku.save() - INSERT SQL: " + sql);
+            int newId = DBHelper.insertQueryGetId(sql);
+            System.out.println("[DEBUG] Buku.save() - insertQueryGetId returned: " + newId);
+            this.idBuku = newId;
         } else {
             String sql = "UPDATE buku SET "
                     + "idkategori = '" + this.getKategori().getIdKategori() + "', "
@@ -168,7 +177,10 @@ public class Buku {
                     + "penerbit = '" + this.penerbit + "', "
                     + "penulis = '" + this.penulis + "' "
                     + "WHERE idbuku = " + this.idBuku;
-            DBHelper.executeQuery(sql);
+            // Debug: print SQL and execution result
+            System.out.println("[DEBUG] Buku.save() - UPDATE SQL: " + sql);
+            boolean ok = DBHelper.executeQuery(sql);
+            System.out.println("[DEBUG] Buku.save() - executeQuery returned: " + ok);
         }
     }
 
